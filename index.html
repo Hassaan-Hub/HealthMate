@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>HealthMate | Your Family's Health, Organized</title>
+
+    <meta name="description"
+        content="HealthMate helps you manage your family's health profiles, medical reports and AI-powered health guidance in one place.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+
+    <header class="header">
+        <nav class="navbar container">
+
+            <a href="#" class="logo">
+                <span class="logo-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+
+                <span>Health<span class="logo-highlight">Mate</span></span>
+            </a>
+
+            <div class="nav-links" id="navLinks">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#ai-guidance">AI Guidance</a>
+                <a href="#security">Security</a>
+
+                <a href="/auth/signup.html" class="nav-button" id="navSignupBtn">
+                    Sign Up
+                </a>
+                <a href="/auth/login.html" id="navLoginBtn" style="display:none;">
+                    Log In
+                </a>
+            </div>
+
+            <div class="nav-actions">
+                <button class="theme-btn" id="themeBtn">
+                    ☾
+                </button>
+
+                <button class="menu-btn" id="menuBtn">
+                    ☰
+                </button>
+            </div>
+
+        </nav>
+    </header>
+
+
+    <!-- ================= HERO ================= -->
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-background-circle circle-one"></div>
+            <div class="hero-background-circle circle-two"></div>
+
+            <div class="container hero-grid">
+
+                <div class="hero-content">
+
+                    <div class="hero-badge">
+                        <span class="badge-dot"></span>
+                        Smart health management for families
+                    </div>
+
+                    <h1>
+                        Your family's health,
+                        <span>organized in one place.</span>
+                    </h1>
+
+                    <p>
+                        Manage family health profiles, organize medical reports,
+                        and understand health information with intelligent
+                        AI-powered guidance.
+                    </p>
+
+                    <div class="hero-buttons">
+
+                        <a href="signup.html" class="primary-btn" id="heroSignupBtn">
+                            Sign Up
+                            <span>→</span>
+                        </a>
+
+                        <a href="#how-it-works" class="secondary-btn">
+                            Explore Features
+                            <span>↓</span>
+                        </a>
+
+                    </div>
+
+                    <div class="hero-trust">
+
+                        <div class="avatars">
+                            <span>H</span>
+                            <span>A</span>
+                            <span>M</span>
+                            <span>+</span>
+                        </div>
+
+                        <div>
+                            <strong>Built for your family</strong>
+                            <p>One simple place for better health organization.</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DASHBOARD MOCKUP -->
+
+                <div class="dashboard-wrapper">
+
+                    <div class="dashboard-glow"></div>
+
+                    <div class="dashboard-card">
+
+                        <div class="dashboard-topbar">
+
+                            <div class="mini-logo">
+                                <span class="mini-logo-icon">✚</span>
+                                <strong>HealthMate</strong>
+                            </div>
+
+                            <div class="profile-circle">
+                                H
+                            </div>
+
+                        </div>
+
+
+                        <div class="dashboard-body">
+
+                            <div class="dashboard-sidebar">
+
+                                <div class="side-item active">
+                                    <span>⌂</span>
+                                    Overview
+                                </div>
+
+                                <div class="side-item">
+                                    <span>♙</span>
+                                    Family
+                                </div>
+
+                                <div class="side-item">
+                                    <span>▤</span>
+                                    Reports
+                                </div>
+
+                                <div class="side-item">
+                                    <span>✦</span>
+                                    AI Guide
+                                </div>
+
+                            </div>
+
+
+                            <div class="dashboard-main">
+
+                                <div class="dashboard-heading">
+
+                                    <div>
+                                        <small>Saturday, July 25</small>
+                                        <h3>Good morning, Hassaan 👋</h3>
+                                    </div>
+
+                                    <button class="notification-btn">
+                                        ♧
+                                    </button>
+
+                                </div>
+
+
+                                <div class="health-overview">
+
+                                    <div class="overview-card">
+                                        <span class="overview-icon blue">♙</span>
+                                        <div>
+                                            <small>Family Members</small>
+                                            <strong>04</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="overview-card">
+                                        <span class="overview-icon green">▤</span>
+                                        <div>
+                                            <small>Medical Reports</small>
+                                            <strong>12</strong>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <div class="dashboard-content-grid">
+
+                                    <div class="family-card">
+
+                                        <div class="card-header">
+                                            <h4>Family Members</h4>
+                                            <span>View all →</span>
+                                        </div>
+
+                                        <div class="family-member">
+                                            <div class="member-avatar avatar-blue">
+                                                H
+                                            </div>
+
+                                            <div>
+                                                <strong>Hassaan Farid</strong>
+                                                <small>Primary Account</small>
+                                            </div>
+
+                                            <span class="status-dot"></span>
+                                        </div>
+
+                                        <div class="family-member">
+                                            <div class="member-avatar avatar-pink">
+                                                A
+                                            </div>
+
+                                            <div>
+                                                <strong>Ayesha Farid</strong>
+                                                <small>Family Member</small>
+                                            </div>
+
+                                            <span class="status-dot"></span>
+                                        </div>
+
+                                        <div class="family-member">
+                                            <div class="member-avatar avatar-green">
+                                                M
+                                            </div>
+
+                                            <div>
+                                                <strong>Muhammad Farid</strong>
+                                                <small>Family Member</small>
+                                            </div>
+
+                                            <span class="status-dot"></span>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="ai-card">
+
+                                        <div class="ai-icon">
+                                            ✦
+                                        </div>
+
+                                        <h4>AI Health Guide</h4>
+
+                                        <p>
+                                            Have questions about your health information?
+                                        </p>
+
+                                        <button>
+                                            Ask HealthMate
+                                            <span>→</span>
+                                        </button>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= STATS ================= -->
+
+        <section class="stats-section">
+
+            <div class="container stats-grid">
+
+                <div class="stat">
+                    <strong>01</strong>
+                    <span>Centralized health platform</span>
+                </div>
+
+                <div class="stat">
+                    <strong>∞</strong>
+                    <span>Family members you can manage</span>
+                </div>
+
+                <div class="stat">
+                    <strong>24/7</strong>
+                    <span>Access to your health information</span>
+                </div>
+
+                <div class="stat">
+                    <strong>AI</strong>
+                    <span>Smarter health understanding</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= FEATURES ================= -->
+
+        <section class="section features-section" id="features">
+
+            <div class="container">
+
+                <div class="section-heading">
+
+                    <span class="section-label">Everything in one place</span>
+
+                    <h2>
+                        A smarter way to manage
+                        <span>family health.</span>
+                    </h2>
+
+                    <p>
+                        HealthMate brings your family's important health information
+                        together in one simple, organized platform.
+                    </p>
+
+                </div>
+
+
+                <div class="features-grid">
+
+                    <article class="feature-card feature-blue">
+
+                        <div class="feature-icon">
+                            ♙
+                        </div>
+
+                        <h3>Family Health Profiles</h3>
+
+                        <p>
+                            Create and manage profiles for every member of your family
+                            from one centralized dashboard.
+                        </p>
+
+                        <a href="#get-started">
+                            Manage your family →
+                        </a>
+
+                    </article>
+
+
+                    <article class="feature-card feature-green">
+
+                        <div class="feature-icon">
+                            ▤
+                        </div>
+
+                        <h3>Medical Reports</h3>
+
+                        <p>
+                            Keep medical reports, prescriptions, test results and
+                            important health documents organized.
+                        </p>
+
+                        <a href="#get-started">
+                            Organize your records →
+                        </a>
+
+                    </article>
+
+
+                    <article class="feature-card feature-purple">
+
+                        <div class="feature-icon">
+                            ✦
+                        </div>
+
+                        <h3>AI Health Guidance</h3>
+
+                        <p>
+                            Understand health information more easily with
+                            intelligent AI-powered guidance.
+                        </p>
+
+                        <a href="#ai-guidance">
+                            Explore AI guidance →
+                        </a>
+
+                    </article>
+
+
+                    <article class="feature-card feature-orange">
+
+                        <div class="feature-icon">
+                            ◴
+                        </div>
+
+                        <h3>Health History</h3>
+
+                        <p>
+                            Keep important family health information accessible
+                            whenever you need it.
+                        </p>
+
+                        <a href="#get-started">
+                            Stay organized →
+                        </a>
+
+                    </article>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= HOW IT WORKS ================= -->
+
+        <section class="section how-section" id="how-it-works">
+
+            <div class="container how-grid">
+
+                <div class="how-content">
+
+                    <span class="section-label">Simple by design</span>
+
+                    <h2>
+                        Your family's health,
+                        <span>simplified.</span>
+                    </h2>
+
+                    <p>
+                        HealthMate makes it easy to keep track of important health
+                        information without the complexity.
+                    </p>
+
+                    <div class="steps">
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                01
+                            </div>
+
+                            <div>
+                                <h3>Create Your Family</h3>
+                                <p>
+                                    Add profiles for your family members and keep
+                                    everyone's information organized.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                02
+                            </div>
+
+                            <div>
+                                <h3>Store Health Records</h3>
+                                <p>
+                                    Upload and organize medical reports and important
+                                    health documents.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="step">
+
+                            <div class="step-number">
+                                03
+                            </div>
+
+                            <div>
+                                <h3>Understand Your Information</h3>
+                                <p>
+                                    Get simple AI-powered guidance to better understand
+                                    your health information.
+                                </p>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="family-visual">
+
+                    <div class="floating-card floating-top">
+                        <span class="floating-icon">✦</span>
+                        <div>
+                            <strong>AI Guidance</strong>
+                            <small>Available when you need it</small>
+                        </div>
+                    </div>
+
+
+                    <div class="family-illustration">
+
+                        <div class="illustration-circle"></div>
+
+                        <div class="person person-one">
+                            <div class="person-head">H</div>
+                            <div class="person-body"></div>
+                        </div>
+
+                        <div class="person person-two">
+                            <div class="person-head">A</div>
+                            <div class="person-body"></div>
+                        </div>
+
+                        <div class="person person-three">
+                            <div class="person-head">M</div>
+                            <div class="person-body"></div>
+                        </div>
+
+                        <div class="heart">
+                            ♡
+                        </div>
+
+                    </div>
+
+
+                    <div class="floating-card floating-bottom">
+                        <span class="floating-icon green-icon">✓</span>
+                        <div>
+                            <strong>12 Reports</strong>
+                            <small>Organized and accessible</small>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= AI SECTION ================= -->
+
+        <section class="ai-section" id="ai-guidance">
+
+            <div class="container ai-grid">
+
+                <div class="ai-chat-preview">
+
+                    <div class="chat-header">
+                        <div class="ai-avatar">✦</div>
+
+                        <div>
+                            <strong>HealthMate AI</strong>
+                            <small>Health information assistant</small>
+                        </div>
+
+                        <span class="online-dot"></span>
+                    </div>
+
+
+                    <div class="chat-body">
+
+                        <div class="chat-message user-message">
+                            What does my medical report mean?
+                        </div>
+
+                        <div class="chat-message ai-message">
+                            I can help explain the information in your report
+                            in simpler language. Remember, this guidance is for
+                            informational purposes and is not a replacement for
+                            professional medical advice.
+                        </div>
+
+                        <div class="chat-input">
+                            <span>Ask HealthMate anything...</span>
+                            <button>→</button>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="ai-content">
+
+                    <span class="section-label light-label">
+                        Meet your intelligent health companion
+                    </span>
+
+                    <h2>
+                        Health information
+                        <span>shouldn't feel confusing.</span>
+                    </h2>
+
+                    <p>
+                        HealthMate AI helps you understand complex health information
+                        in a simple and accessible way.
+                    </p>
+
+                    <div class="ai-benefits">
+
+                        <div>
+                            <span>✓</span>
+                            Simple explanations
+                        </div>
+
+                        <div>
+                            <span>✓</span>
+                            Ask questions naturally
+                        </div>
+
+                        <div>
+                            <span>✓</span>
+                            Understand your health information
+                        </div>
+
+                    </div>
+
+                    <a href="#get-started" class="light-btn">
+                        Explore AI Guidance →
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= SECURITY ================= -->
+
+        <section class="section security-section" id="security">
+
+            <div class="container security-grid">
+
+                <div class="security-content">
+
+                    <span class="section-label">Your privacy matters</span>
+
+                    <h2>
+                        Your family's health information
+                        <span>deserves protection.</span>
+                    </h2>
+
+                    <p>
+                        HealthMate is designed with privacy and security in mind,
+                        helping you keep your important health information organized
+                        and protected.
+                    </p>
+
+                    <div class="security-features">
+
+                        <div class="security-item">
+                            <div class="security-icon">⌾</div>
+
+                            <div>
+                                <h3>Private by design</h3>
+                                <p>Your health information stays personal.</p>
+                            </div>
+                        </div>
+
+
+                        <div class="security-item">
+                            <div class="security-icon">▣</div>
+
+                            <div>
+                                <h3>Organized records</h3>
+                                <p>Access your information when you need it.</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="security-card">
+
+                    <div class="security-shield">
+                        ✓
+                    </div>
+
+                    <h3>Your health. Your control.</h3>
+
+                    <p>
+                        A simple and organized place for the health information
+                        that matters most.
+                    </p>
+
+                    <div class="security-lines">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ================= CTA ================= -->
+
+        <section class="cta-section" id="get-started">
+
+            <div class="container cta-content">
+
+                <div class="cta-decoration decoration-one"></div>
+                <div class="cta-decoration decoration-two"></div>
+
+                <span class="section-label light-label">
+                    Take the first step
+                </span>
+
+                <h2>
+                    Better organized health
+                    <span>starts here.</span>
+                </h2>
+
+                <p>
+                    Bring your family's health information together with HealthMate.
+                </p>
+
+                <a href="/auth/signup.html" class="cta-button">
+                    Sign Up with HealthMate
+                    <span>→</span>
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ================= FOOTER ================= -->
+
+    <footer class="footer">
+
+        <div class="container footer-grid">
+
+            <div class="footer-brand">
+
+                <a href="#" class="logo footer-logo">
+                    <span class="logo-icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </span>
+
+                    <span>Health<span class="logo-highlight">Mate</span></span>
+                </a>
+
+                <p>
+                    Your family's health, organized in one place.
+                </p>
+
+            </div>
+
+
+            <div class="footer-links">
+
+                <div>
+                    <h4>Platform</h4>
+
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#ai-guidance">AI Guidance</a>
+                </div>
+
+
+                <div>
+                    <h4>Company</h4>
+
+                    <a href="#security">Security</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Contact</a>
+                </div>
+
+
+                <div>
+                    <h4>Sign Up</h4>
+
+                    <a href="/auth/signup.html">Create Account</a>
+                    <a href="/auth/login.html">Login</a>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="container footer-bottom">
+
+            <p>
+                © 2026 HealthMate. All rights reserved.
+            </p>
+
+            <p>
+                Built for better family health management.
+            </p>
+
+        </div>
+
+    </footer>
+
+
+    <script type="module">
+        import { auth, onAuthStateChanged } from "./firebase.js";
+
+        const navSignupBtn = document.getElementById("navSignupBtn");
+        const navLoginBtn = document.getElementById("navLoginBtn");
+        const heroSignupBtn = document.getElementById("heroSignupBtn");
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                if (navSignupBtn) {
+                    navSignupBtn.textContent = "Dashboard";
+                    navSignupBtn.href = "/dashboard/dashboard.html";
+                }
+                if (navLoginBtn) navLoginBtn.style.display = "none";
+                if (heroSignupBtn) {
+                    heroSignupBtn.innerHTML = 'Dashboard <span>→</span>';
+                    heroSignupBtn.href = "/dashboard/dashboard.html";
+                }
+            } else {
+                if (navLoginBtn) navLoginBtn.style.display = "inline-flex";
+                if (navSignupBtn) {
+                    navSignupBtn.textContent = "Sign Up";
+                    navSignupBtn.href = "/auth/signup.html";
+                }
+                if (heroSignupBtn) {
+                    heroSignupBtn.innerHTML = 'Sign Up <span>→</span>';
+                    heroSignupBtn.href = "signup.html";
+                }
+            }
+        });
+    </script>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

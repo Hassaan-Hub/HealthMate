@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthMate Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+    <div class="dashboard">
+        <!-- ================= Sidebar ================= -->
+        <aside class="sidebar">
+            <div class="logo">
+                ❤️ HealthMate
+            </div>
+            <nav>
+                <a class="active">🏠 Dashboard</a>
+                <a>👨‍👩‍👧 Family Members</a>
+                <a>📄 Medical Reports</a>
+                <a>🤖 AI HealthMate</a>
+                <a>📅 Appointments</a>
+                <a>⚙️ Settings</a>
+                <a id="logoutBtn">🚪 Logout</a>
+            </nav>
+        </aside>
+        <!-- ================= Main ================= -->
+        <main>
+            <!-- Header -->
+            <header>
+                <div>
+                    <h1>
+                        Good Morning 👋
+                    </h1>
+                    <p>
+                        Welcome back,
+                        <span id="username">
+                            Loading...
+                        </span>
+                    </p>
+                </div>
+                <div class="header-right">
+                    <input type="text" placeholder="Search">
+                    <button>
+                        🔔
+                    </button>
+                </div>
+            </header>
+            <!-- Stats -->
+            <section class="cards">
+                <div class="card">
+                    <h2 id="memberCount">
+                        0
+                    </h2>
+                    <p>
+                        Family Members
+                    </p>
+                </div>
+                <div class="card">
+                    <h2>
+                        0
+                    </h2>
+                    <p>
+                        Medical Reports
+                    </p>
+                </div>
+                <div class="card">
+                    <h2>
+                        0
+                    </h2>
+                    <p>
+                        Appointments
+                    </p>
+                </div>
+                <div class="card">
+                    <h2>
+                        100%
+                    </h2>
+                    <p>
+                        Health Score
+                    </p>
+                </div>
+            </section>
+            <!-- Add Member -->
+            <section class="member-box">
+                <h2>
+                    Add Family Member
+                </h2>
+                <form id="memberForm">
+                    <input id="name" placeholder="Full Name" required>
+                    <input id="age" type="number" placeholder="Age" required>
+                    <input id="relation" placeholder="Relation" required>
+                    <button>
+                        + Save Member
+                    </button>
+                </form>
+            </section>
+            <!-- Member List -->
+            <section>
+                <h2>
+                    Family Members
+                </h2>
+                <div id="members" class="member-grid">
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+<script type="module" src="dashboard.js" defer></script>
+
+</html>

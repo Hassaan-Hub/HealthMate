@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | HealthMate</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="auth.css">
+
+</head>
+
+<body>
+
+    <main class="auth-page">
+
+        <!-- LEFT SIDE -->
+
+        <section class="auth-info">
+
+            <a href="index.html" class="auth-logo">
+                <span class="logo-icon">✚</span>
+                Health<span>Mate</span>
+            </a>
+
+            <div class="info-content">
+
+                <span class="info-badge">
+                    ✦ Welcome back to HealthMate
+                </span>
+
+                <h1>
+                    Your family's health,
+                    <span>always within reach.</span>
+                </h1>
+
+                <p>
+                    Log in to access your family health profiles,
+                    medical reports, and personalized AI guidance.
+                </p>
+
+                <div class="health-quote">
+
+                    <span class="quote-icon">“</span>
+
+                    <p>
+                        Better organized health information
+                        leads to better informed decisions.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <p class="copyright">
+                © 2026 HealthMate. All rights reserved.
+            </p>
+
+        </section>
+
+
+        <!-- RIGHT SIDE -->
+
+        <section class="auth-form-section">
+
+            <div class="auth-form-container">
+
+                <div class="mobile-logo">
+
+                    <a href="index.html" class="auth-logo">
+                        <span class="logo-icon">✚</span>
+                        Health<span>Mate</span>
+                    </a>
+
+                </div>
+
+
+                <div class="form-heading">
+
+                    <h2>Welcome back</h2>
+
+                    <p>
+                        Log in to continue to your HealthMate dashboard.
+                    </p>
+
+                </div>
+
+
+                <form id="loginForm">
+
+                    <div class="form-group">
+
+                        <label for="loginEmail">
+                            Email Address
+                        </label>
+
+                        <input type="email" id="loginEmail" placeholder="you@example.com" required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <div class="password-label">
+
+                            <label for="loginPassword">
+                                Password
+                            </label>
+
+                            <a href="#">
+                                Forgot password?
+                            </a>
+
+                        </div>
+
+
+                        <div class="password-wrapper">
+
+                            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+
+                            <button type="button" class="password-toggle" data-target="loginPassword">
+                                Show
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <label class="remember-me">
+
+                        <input type="checkbox">
+
+                        Remember me
+
+                    </label>
+
+
+                    <button type="submit" class="auth-button">
+                        Log In
+                        <span>→</span>
+                    </button>
+
+
+                    <div id="loginMessage" class="form-message"></div>
+
+                </form>
+
+
+                <div class="auth-divider">
+                    <span>New to HealthMate?</span>
+                </div>
+
+
+                <a href="signup.html" class="switch-auth">
+                    Create a new account
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+</body>
+<script type="module" src="login.js"></script>
+</html>
