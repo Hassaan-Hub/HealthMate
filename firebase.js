@@ -24,13 +24,7 @@ import {
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
 
-import {
-    getStorage,
-    ref,
-    uploadBytes,
-    getDownloadURL,
-    deleteObject
-} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-storage.js";
+
 
 
 // =========================
@@ -67,14 +61,6 @@ const auth = getAuth(app);
 // =========================
 
 const db = getFirestore(app);
-
-
-// =========================
-// INITIALIZE STORAGE
-// =========================
-
-const storage = getStorage(app);
-
 
 // =========================
 // SIGN UP FUNCTION
@@ -295,23 +281,35 @@ async function getMemberById(memberId) {
 
 
 // =========================
-// UPLOAD REPORT FILE
+// CLOUDINARY UPLOAD
 // =========================
 
-async function uploadReportFile(memberId, file) {
-    const user = auth.currentUser;
-    if (!user) throw new Error("User not logged in");
+const CLOUDINARY_CLOUD_NAME = 'dg4zfs5xn';
+const CLOUDINARY_UPLOAD_PRESET = 'save-practice';
+const CLOUDINARY_UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`;
 
-    const fileName = `${Date.now()}_${file.name}`;
-    const storageRef = ref(storage, `users/${user.uid}/familyMembers/${memberId}/reports/${fileName}`);
-    const snapshot = await uploadBytes(storageRef, file);
-    const downloadUrl = await getDownloadURL(snapshot.ref);
-    return downloadUrl;
+async function uploadToCloudinary(file) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+
+    const response = await fetch(CLOUDINARY_UPLOAD_URL, {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error?.message || 'Cloudinary upload failed');
+    }
+
+    const data = await response.json();
+    return data.secure_url;
 }
 
 
 // =========================
-// ADD REPORT
+// ADD REPORT (Image Only)
 // =========================
 
 async function addReport(memberId, reportData) {
@@ -321,7 +319,7 @@ async function addReport(memberId, reportData) {
     const docRef = await addDoc(
         collection(db, "users", user.uid, "familyMembers", memberId, "reports"),
         {
-            ...reportData,
+            imageUrl: reportData.imageUrl,
             createdAt: serverTimestamp()
         }
     );
@@ -352,36 +350,12 @@ async function getReports(memberId) {
 // DELETE REPORT
 // =========================
 
-async function deleteReport(memberId, reportId, fileUrl) {
+async function deleteReport(memberId, reportId) {
     const user = auth.currentUser;
     if (!user) throw new Error("User not logged in");
-
-    if (fileUrl) {
-        try {
-            const fileRef = ref(storage, fileUrl);
-            await deleteObject(fileRef);
-        } catch (e) {
-            console.log("Storage file delete skipped:", e.message);
-        }
-    }
 
     await deleteDoc(
         doc(db, "users", user.uid, "familyMembers", memberId, "reports", reportId)
-    );
-}
-
-
-// =========================
-// UPDATE REPORT
-// =========================
-
-async function updateReport(memberId, reportId, reportData) {
-    const user = auth.currentUser;
-    if (!user) throw new Error("User not logged in");
-
-    await updateDoc(
-        doc(db, "users", user.uid, "familyMembers", memberId, "reports", reportId),
-        reportData
     );
 }
 
@@ -393,7 +367,6 @@ async function updateReport(memberId, reportId, reportData) {
 export {
     auth,
     db,
-    storage,
     signupUser,
     loginUser,
     getUserData,
@@ -403,10 +376,9 @@ export {
     updateFamilyMember,
     deleteFamilyMember,
     getMemberById,
-    uploadReportFile,
+    uploadToCloudinary,
     addReport,
     getReports,
     deleteReport,
-    updateReport,
     onAuthStateChanged,
 };

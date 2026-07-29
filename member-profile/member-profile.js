@@ -4,8 +4,7 @@ import {
     getReports,
     addReport,
     deleteReport,
-    updateReport,
-    uploadReportFile,
+    uploadToCloudinary,
     updateFamilyMember,
     getUserData,
     onAuthStateChanged,
@@ -41,11 +40,21 @@ const logoutBtn = $('logoutBtn');
 
 const uploadModal = $('uploadModal');
 const editProfileModal = $('editProfileModal');
-const viewReportModal = $('viewReportModal');
+const viewImageModal = $('viewImageModal');
 const confirmModal = $('confirmModal');
 
-const reportForm = $('reportForm');
+const reportFileInput = $('reportFileInput');
+const uploadDropzone = $('uploadDropzone');
+const uploadPreview = $('uploadPreview');
+const previewImage = $('previewImage');
+const changeImageBtn = $('changeImageBtn');
+const submitUploadBtn = $('submitUploadBtn');
+
 const editProfileForm = $('editProfileForm');
+const toastContainer = $('toastContainer');
+
+const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
+const ALLOWED_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
 
 onAuthStateChanged(auth, async (user) => {
     if (!user) {
@@ -127,6 +136,23 @@ async function loadReports() {
     }
 }
 
+function formatDate(date) {
+    if (!date) return '—';
+    const d = typeof date === 'string' ? new Date(date) : date;
+    if (isNaN(d.getTime())) return '—';
+    return d.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+function formatDateFromTimestamp(timestamp) {
+    if (!timestamp) return '—';
+    const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+    return formatDate(date);
+}
+
 function renderReports() {
     reportsGrid.innerHTML = '';
 
@@ -142,70 +168,38 @@ function renderReports() {
     reports.forEach((report, index) => {
         const card = document.createElement('div');
         card.className = 'report-card';
-        card.style.animationDelay = `${index * 0.08}s`;
+        card.style.animationDelay = `${index * 0.05}s`;
 
-        const category = report.category || 'General';
-        const reportDate = report.reportDate
-            ? formatDate(report.reportDate)
-            : '—';
-        const notes = report.notes
-            ? report.notes.length > 80
-                ? report.notes.substring(0, 80) + '...'
-                : report.notes
-            : '';
-        const createdAt = report.createdAt?.toDate
-            ? formatDate(report.createdAt.toDate())
-            : '—';
+        const createdAt = formatDateFromTimestamp(report.createdAt);
 
         card.innerHTML = `
-            <div class="report-card-header">
-                <h3>${escapeHtml(report.title || 'Untitled')}</h3>
-                <span class="report-category">${escapeHtml(category)}</span>
-            </div>
-            <div class="report-card-body">
-                <div class="report-detail">
-                    <span class="report-detail-label">Hospital</span>
-                    <span class="report-detail-value">${escapeHtml(report.hospital || '—')}</span>
-                </div>
-                <div class="report-detail">
-                    <span class="report-detail-label">Doctor</span>
-                    <span class="report-detail-value">${escapeHtml(report.doctor || '—')}</span>
-                </div>
-                <div class="report-detail full-width">
-                    <span class="report-detail-label">Report Date</span>
-                    <span class="report-detail-value">${reportDate}</span>
+            <div class="report-image-wrapper">
+                <img src="${escapeHtml(report.imageUrl)}" alt="Medical Report" loading="lazy" class="report-thumbnail">
+                <div class="report-image-overlay">
+                    <button class="overlay-view-btn" data-id="${report.id}">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                        View
+                    </button>
                 </div>
             </div>
-            ${notes ? `<div class="report-notes">${escapeHtml(notes)}</div>` : ''}
             <div class="report-card-footer">
-                <span class="report-created">Added ${createdAt}</span>
-                <div class="report-actions">
-                    <button class="view-btn" data-id="${report.id}">👁 View</button>
-                    ${report.fileUrl ? `<button class="download-btn" data-url="${report.fileUrl}" data-title="${escapeHtml(report.title)}">⬇ Download</button>` : ''}
-                    <button class="delete-btn" data-id="${report.id}">🗑 Delete</button>
-                </div>
+                <span class="report-created">${createdAt}</span>
+                <button class="delete-btn" data-id="${report.id}" title="Delete report">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
             </div>
         `;
 
-        card.querySelector('.view-btn').addEventListener('click', () => viewReport(report));
-        const downloadBtn = card.querySelector('.download-btn');
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', () => downloadReport(report));
-        }
-        card.querySelector('.delete-btn').addEventListener('click', () => promptDeleteReport(report.id, report.fileUrl));
+        const viewBtn = card.querySelector('.overlay-view-btn');
+        viewBtn.addEventListener('click', () => viewReportImage(report));
+
+        const deleteBtn = card.querySelector('.delete-btn');
+        deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            promptDeleteReport(report);
+        });
 
         reportsGrid.appendChild(card);
-    });
-}
-
-function formatDate(date) {
-    if (!date) return '—';
-    const d = typeof date === 'string' ? new Date(date) : date;
-    if (isNaN(d.getTime())) return '—';
-    return d.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
     });
 }
 
@@ -216,12 +210,63 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
-// ==================== UPLOAD REPORT ====================
+// ==================== TOAST NOTIFICATIONS ====================
+
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+
+    const icon = type === 'success'
+        ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`
+        : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`;
+
+    toast.innerHTML = `${icon}<span>${message}</span>`;
+    toastContainer.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.classList.add('toast-visible');
+    });
+
+    setTimeout(() => {
+        toast.classList.remove('toast-visible');
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
+}
+
+function showLoadingToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast toast-loading';
+
+    toast.innerHTML = `
+        <div class="toast-spinner"></div>
+        <span>${message}</span>
+    `;
+
+    toastContainer.appendChild(toast);
+
+    requestAnimationFrame(() => {
+        toast.classList.add('toast-visible');
+    });
+
+    return toast;
+}
+
+function removeToast(toast) {
+    toast.classList.remove('toast-visible');
+    setTimeout(() => toast.remove(), 300);
+}
+
+// ==================== UPLOAD REPORT (Image Only) ====================
+
+let selectedFile = null;
 
 uploadReportBtn.addEventListener('click', () => {
-    reportForm.reset();
-    $('fileInputLabel').innerHTML = '<span class="file-icon">📁</span><span>Choose file or drag here</span>';
-    $('fileInputLabel').parentElement.classList.remove('has-file');
+    selectedFile = null;
+    reportFileInput.value = '';
+    uploadDropzone.style.display = 'flex';
+    uploadPreview.style.display = 'none';
+    submitUploadBtn.disabled = true;
+    submitUploadBtn.textContent = 'Upload Report';
     uploadModal.style.display = 'flex';
 });
 
@@ -233,147 +278,136 @@ uploadModal.addEventListener('click', (e) => {
     if (e.target === uploadModal) uploadModal.style.display = 'none';
 });
 
-$('reportFile').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    const label = $('fileInputLabel');
-    if (file) {
-        label.innerHTML = `<span class="file-icon">📄</span><span>${file.name}</span>`;
-        label.parentElement.classList.add('has-file');
-    } else {
-        label.innerHTML = '<span class="file-icon">📁</span><span>Choose file or drag here</span>';
-        label.parentElement.classList.remove('has-file');
+uploadDropzone.addEventListener('click', () => {
+    reportFileInput.click();
+});
+
+uploadDropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadDropzone.classList.add('drag-over');
+});
+
+uploadDropzone.addEventListener('dragleave', () => {
+    uploadDropzone.classList.remove('drag-over');
+});
+
+uploadDropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadDropzone.classList.remove('drag-over');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+        handleFileSelect(files[0]);
     }
 });
 
-reportForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+reportFileInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+        handleFileSelect(file);
+    }
+});
 
-    const title = $('reportTitle').value.trim();
-    const hospital = $('reportHospital').value.trim();
-    const doctor = $('reportDoctor').value.trim();
-    const category = $('reportCategory').value;
-    const reportDate = $('reportDate').value;
-    const notes = $('reportNotes').value.trim();
-    const file = $('reportFile').files[0];
+changeImageBtn.addEventListener('click', () => {
+    reportFileInput.value = '';
+    selectedFile = null;
+    uploadDropzone.style.display = 'flex';
+    uploadPreview.style.display = 'none';
+    submitUploadBtn.disabled = true;
+});
 
-    if (!title || !category || !reportDate) return;
+function handleFileSelect(file) {
+    if (!ALLOWED_TYPES.includes(file.type)) {
+        showToast('Please select a valid image (JPG, PNG, WebP, or GIF)', 'error');
+        reportFileInput.value = '';
+        return;
+    }
 
-    const submitBtn = reportForm.querySelector('.save-btn');
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Uploading...';
+    if (file.size > 10 * 1024 * 1024) {
+        showToast('Image must be less than 10MB', 'error');
+        reportFileInput.value = '';
+        return;
+    }
+
+    selectedFile = file;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        previewImage.src = e.target.result;
+        uploadDropzone.style.display = 'none';
+        uploadPreview.style.display = 'flex';
+        submitUploadBtn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+}
+
+submitUploadBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+
+    submitUploadBtn.disabled = true;
+    submitUploadBtn.textContent = 'Uploading...';
+
+    const loadingToast = showLoadingToast('Uploading report to Cloudinary...');
 
     try {
-        let fileUrl = null;
-        if (file) {
-            fileUrl = await uploadReportFile(memberId, file);
-        }
+        const imageUrl = await uploadToCloudinary(selectedFile);
 
-        await addReport(memberId, {
-            title,
-            hospital,
-            doctor,
-            category,
-            reportDate,
-            notes,
-            fileUrl,
-        });
+        loadingToast.querySelector('span').textContent = 'Saving to database...';
+
+        await addReport(memberId, { imageUrl });
+
+        removeToast(loadingToast);
+        showToast('Report uploaded successfully', 'success');
 
         uploadModal.style.display = 'none';
         await loadReports();
 
     } catch (err) {
         console.error('Upload error:', err);
-        alert('Failed to upload report. Please try again.');
+        removeToast(loadingToast);
+        showToast(err.message || 'Failed to upload report', 'error');
     } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Save Report';
+        submitUploadBtn.disabled = false;
+        submitUploadBtn.textContent = 'Upload Report';
     }
 });
 
-// ==================== VIEW REPORT ====================
+// ==================== VIEW REPORT IMAGE (Full Screen) ====================
 
-function viewReport(report) {
-    const titleEl = $('viewReportTitle');
-    const content = $('reportViewContent');
+function viewReportImage(report) {
+    const fullImage = $('viewImageFull');
+    const dateEl = $('viewImageDate');
 
-    titleEl.textContent = report.title || 'Report Details';
+    fullImage.src = report.imageUrl;
+    fullImage.alt = 'Medical Report';
 
-    const reportDate = report.reportDate ? formatDate(report.reportDate) : '—';
-    const createdAt = report.createdAt?.toDate ? formatDate(report.createdAt.toDate()) : '—';
+    const createdAt = formatDateFromTimestamp(report.createdAt);
+    dateEl.textContent = `Uploaded ${createdAt}`;
 
-    let fileHtml = '';
-    if (report.fileUrl) {
-        const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(report.fileUrl);
-        if (isImage) {
-            fileHtml = `<img src="${report.fileUrl}" alt="${escapeHtml(report.title)}">`;
-        } else {
-            fileHtml = `
-                <div class="file-placeholder">
-                    <span class="file-icon">📄</span>
-                    <span>PDF file</span>
-                    <a href="${report.fileUrl}" target="_blank" class="view-download-btn">⬇ Download PDF</a>
-                </div>
-            `;
-        }
-    } else {
-        fileHtml = `
-            <div class="file-placeholder">
-                <span class="file-icon">📁</span>
-                <span>No file attached</span>
-            </div>
-        `;
-    }
-
-    content.innerHTML = `
-        <div class="report-view-grid">
-            <div class="report-view-item">
-                <span class="label">Hospital</span>
-                <span class="value">${escapeHtml(report.hospital || '—')}</span>
-            </div>
-            <div class="report-view-item">
-                <span class="label">Doctor</span>
-                <span class="value">${escapeHtml(report.doctor || '—')}</span>
-            </div>
-            <div class="report-view-item">
-                <span class="label">Category</span>
-                <span class="value">${escapeHtml(report.category || '—')}</span>
-            </div>
-            <div class="report-view-item">
-                <span class="label">Report Date</span>
-                <span class="value">${reportDate}</span>
-            </div>
-            <div class="report-view-item full">
-                <span class="label">Added</span>
-                <span class="value">${createdAt}</span>
-            </div>
-        </div>
-        ${report.notes ? `<div class="report-view-notes">${escapeHtml(report.notes)}</div>` : ''}
-        <div class="report-view-file">${fileHtml}</div>
-    `;
-
-    viewReportModal.style.display = 'flex';
+    viewImageModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
 }
 
-$('closeViewModalBtn').addEventListener('click', () => {
-    viewReportModal.style.display = 'none';
+$('closeViewImageBtn').addEventListener('click', closeViewImage);
+
+viewImageModal.addEventListener('click', (e) => {
+    if (e.target === viewImageModal) closeViewImage();
 });
 
-viewReportModal.addEventListener('click', (e) => {
-    if (e.target === viewReportModal) viewReportModal.style.display = 'none';
-});
-
-// ==================== DOWNLOAD REPORT ====================
-
-function downloadReport(report) {
-    if (report.fileUrl) {
-        window.open(report.fileUrl, '_blank');
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && viewImageModal.style.display === 'flex') {
+        closeViewImage();
     }
+});
+
+function closeViewImage() {
+    viewImageModal.style.display = 'none';
+    document.body.style.overflow = '';
 }
 
 // ==================== DELETE REPORT ====================
 
-function promptDeleteReport(reportId, fileUrl) {
-    deleteTarget = { reportId, fileUrl };
+function promptDeleteReport(report) {
+    deleteTarget = report;
     confirmModal.style.display = 'flex';
 }
 
@@ -397,14 +431,21 @@ confirmModal.addEventListener('click', (e) => {
 $('confirmDeleteBtn').addEventListener('click', async () => {
     if (!deleteTarget) return;
 
+    const loadingToast = showLoadingToast('Deleting report...');
+
     try {
-        await deleteReport(memberId, deleteTarget.reportId, deleteTarget.fileUrl);
+        await deleteReport(memberId, deleteTarget.id);
         confirmModal.style.display = 'none';
         deleteTarget = null;
+
+        removeToast(loadingToast);
+        showToast('Report deleted successfully', 'success');
+
         await loadReports();
     } catch (err) {
         console.error('Delete error:', err);
-        alert('Failed to delete report.');
+        removeToast(loadingToast);
+        showToast('Failed to delete report', 'error');
         confirmModal.style.display = 'none';
         deleteTarget = null;
     }
@@ -453,10 +494,11 @@ editProfileForm.addEventListener('submit', async (e) => {
     try {
         await updateFamilyMember(memberId, updatedData);
         editProfileModal.style.display = 'none';
+        showToast('Profile updated successfully', 'success');
         await loadProfile();
     } catch (err) {
         console.error('Edit profile error:', err);
-        alert('Failed to update profile.');
+        showToast('Failed to update profile', 'error');
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Save Changes';
