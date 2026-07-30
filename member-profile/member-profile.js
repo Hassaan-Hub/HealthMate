@@ -2,7 +2,9 @@ import {
     auth,
     getMemberById,
     getReports,
+    getReport,
     addReport,
+    updateReport,
     deleteReport,
     uploadToCloudinary,
     updateFamilyMember,
@@ -15,8 +17,64 @@ let memberId = null;
 let memberData = null;
 let reports = [];
 let deleteTarget = null;
+let currentViewReport = null;
+
+const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY'; // Get yours at https://makersuite.google.com/app/apikey
+const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`;
 
 const $ = (id) => document.getElementById(id);
+
+// Sidebar elements
+const sidebar = document.getElementById('sidebar');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+
+function toggleSidebar() {
+    sidebar.classList.toggle('open');
+    hamburgerBtn.classList.toggle('open');
+    sidebarOverlay.classList.toggle('active');
+    document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+}
+
+function closeSidebar() {
+    sidebar.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    sidebarOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+if (hamburgerBtn) {
+    hamburgerBtn.addEventListener('click', toggleSidebar);
+}
+
+if (sidebarCloseBtn) {
+    sidebarCloseBtn.addEventListener('click', closeSidebar);
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeSidebar);
+}
+
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebar();
+    }
+});
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024 && sidebar.classList.contains('open')) {
+        closeSidebar();
+    }
+});
+
+document.querySelectorAll('.sidebar nav a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+            closeSidebar();
+        }
+    });
+});
 
 const loadingState = $('loadingState');
 const errorState = $('errorState');
@@ -210,6 +268,101 @@ function escapeHtml(str) {
     return div.innerHTML;
 }
 
+// ==================== AI REPORT ANALYSIS ====================
+
+async function imageToBase64(imageUrl) {
+    const response = await fetch(imageUrl);
+    if (!response.ok) throw new Error('Failed to fetch image');
+    const blob = await response.blob();
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const result = reader.result;
+            const base64 = result.split(',')[1];
+            resolve({ base64, mimeType: blob.type });
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(blob);
+    });
+}
+
+async function generateAiSummary(base64, mimeType) {
+    const response = await fetch(GEMINI_API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            contents: [{
+                parts: [
+                    {
+                        text: 'Analyze this medical report image and provide a concise summary. Include any notable findings, test results, diagnoses, or recommendations mentioned. Keep the summary clear and easy to understand.'
+                    },
+                    {
+                        inline_data: { mime_type: mimeType, data: base64 }
+                    }
+                ]
+            }]
+        })
+    });
+
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error?.message || 'AI analysis failed');
+    }
+
+    const data = await response.json();
+    return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No summary could be generated.';
+}
+
+async function handleAiAnalyze() {
+    const btn = $('aiAnalyzeBtn');
+    const loading = $('aiLoading');
+    const summaryEl = $('aiSummary');
+
+    if (!currentViewReport) return;
+
+    btn.disabled = true;
+    loading.style.display = 'flex';
+    summaryEl.style.display = 'none';
+
+    try {
+        const report = await getReport(memberId, currentViewReport.id);
+
+        if (report?.summary) {
+            summaryEl.innerHTML = `<div class="ai-summary-text">${escapeHtml(report.summary)}</div>`;
+            if (report.summaryGeneratedAt) {
+                const dateStr = formatDateFromTimestamp(report.summaryGeneratedAt);
+                summaryEl.innerHTML += `<div class="ai-summary-date">Generated ${dateStr}</div>`;
+            }
+            summaryEl.style.display = 'block';
+            loading.style.display = 'none';
+            btn.style.display = 'none';
+            return;
+        }
+
+        const { base64, mimeType } = await imageToBase64(currentViewReport.imageUrl);
+
+        const summary = await generateAiSummary(base64, mimeType);
+
+        summaryEl.innerHTML = `<div class="ai-summary-text">${escapeHtml(summary)}</div>`;
+        summaryEl.style.display = 'block';
+
+        await updateReport(memberId, currentViewReport.id, {
+            summary,
+            summaryGeneratedAt: new Date().toISOString()
+        });
+
+        currentViewReport.summary = summary;
+        btn.style.display = 'none';
+
+    } catch (err) {
+        console.error('AI Analyze error:', err);
+        showToast(err.message || 'AI analysis failed. Please try again.', 'error');
+    } finally {
+        loading.style.display = 'none';
+        btn.disabled = false;
+    }
+}
+
 // ==================== TOAST NOTIFICATIONS ====================
 
 function showToast(message, type = 'success') {
@@ -376,12 +529,32 @@ submitUploadBtn.addEventListener('click', async () => {
 function viewReportImage(report) {
     const fullImage = $('viewImageFull');
     const dateEl = $('viewImageDate');
+    const btn = $('aiAnalyzeBtn');
+    const loading = $('aiLoading');
+    const summaryEl = $('aiSummary');
 
+    currentViewReport = report;
     fullImage.src = report.imageUrl;
     fullImage.alt = 'Medical Report';
 
     const createdAt = formatDateFromTimestamp(report.createdAt);
     dateEl.textContent = `Uploaded ${createdAt}`;
+
+    if (report.summary) {
+        btn.style.display = 'none';
+        loading.style.display = 'none';
+        summaryEl.innerHTML = `<div class="ai-summary-text">${escapeHtml(report.summary)}</div>`;
+        if (report.summaryGeneratedAt) {
+            const dateStr = formatDateFromTimestamp(report.summaryGeneratedAt);
+            summaryEl.innerHTML += `<div class="ai-summary-date">Generated ${dateStr}</div>`;
+        }
+        summaryEl.style.display = 'block';
+    } else {
+        btn.style.display = 'flex';
+        btn.disabled = false;
+        loading.style.display = 'none';
+        summaryEl.style.display = 'none';
+    }
 
     viewImageModal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
@@ -402,7 +575,10 @@ document.addEventListener('keydown', (e) => {
 function closeViewImage() {
     viewImageModal.style.display = 'none';
     document.body.style.overflow = '';
+    currentViewReport = null;
 }
+
+$('aiAnalyzeBtn').addEventListener('click', handleAiAnalyze);
 
 // ==================== DELETE REPORT ====================
 

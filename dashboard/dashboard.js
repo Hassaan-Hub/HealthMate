@@ -21,6 +21,62 @@ const ageInput = document.getElementById('age');
 const relationInput = document.getElementById('relation');
 const membersGrid = document.getElementById('members');
 const logoutBtn = document.getElementById('logoutBtn');
+
+// Sidebar elements
+const sidebar = document.getElementById('sidebar');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+
+function toggleSidebar() {
+    sidebar.classList.toggle('open');
+    hamburgerBtn.classList.toggle('open');
+    sidebarOverlay.classList.toggle('active');
+    document.body.style.overflow = sidebar.classList.contains('open') ? 'hidden' : '';
+}
+
+function closeSidebar() {
+    sidebar.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    sidebarOverlay.classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+if (hamburgerBtn) {
+    hamburgerBtn.addEventListener('click', toggleSidebar);
+}
+
+if (sidebarCloseBtn) {
+    sidebarCloseBtn.addEventListener('click', closeSidebar);
+}
+
+if (sidebarOverlay) {
+    sidebarOverlay.addEventListener('click', closeSidebar);
+}
+
+// Close sidebar on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebar();
+    }
+});
+
+// Close sidebar on window resize above 1024px
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024 && sidebar.classList.contains('open')) {
+        closeSidebar();
+    }
+});
+
+// Close sidebar when a nav link is clicked (mobile)
+document.querySelectorAll('.sidebar nav a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+            closeSidebar();
+        }
+    });
+});
+
 // Initialize
 
 

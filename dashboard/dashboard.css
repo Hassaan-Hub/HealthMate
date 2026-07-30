@@ -82,11 +82,75 @@ body::after {
     min-height: 100vh;
 }
 
+/* --- Hamburger Button --- */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: var(--white);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-fast);
+}
+
+.hamburger span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--dark);
+    border-radius: 2px;
+    transition: var(--transition-normal);
+    transform-origin: center;
+}
+
+.hamburger:hover {
+    background: #F1F5F9;
+    border-color: #CBD5E1;
+}
+
+/* Hamburger open state */
+.hamburger.open span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+.hamburger.open span:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.open span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* --- Sidebar Overlay --- */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 90;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
 /* --- Sidebar --- */
 .sidebar {
     background: linear-gradient(185deg, #0b1120 0%, #0f172a 100%);
     border-right: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 36px 24px;
+    padding: 28px 20px;
     display: flex;
     flex-direction: column;
     position: sticky;
@@ -97,22 +161,48 @@ body::after {
     backdrop-filter: var(--glass-blur);
 }
 
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 40px;
+}
+
 .sidebar .logo {
     font-family: var(--font-heading);
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: 800;
     color: var(--white);
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 48px;
     letter-spacing: -0.03em;
+}
+
+.sidebar-close {
+    display: none;
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+    color: #94A3B8;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.sidebar-close:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--white);
 }
 
 .sidebar nav {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     flex-grow: 1;
 }
 
@@ -120,12 +210,12 @@ body::after {
     display: flex;
     align-items: center;
     gap: 14px;
-    padding: 14px 18px;
+    padding: 12px 16px;
     border-radius: var(--radius-md);
     color: #94A3B8;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     transition: var(--transition-normal);
     cursor: pointer;
 }
@@ -146,7 +236,7 @@ body::after {
 #logoutBtn {
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 24px;
+    padding-top: 20px;
 }
 
 #logoutBtn:hover {
@@ -156,12 +246,12 @@ body::after {
 
 /* --- Main Content Area --- */
 main {
-    padding: 40px 48px;
+    padding: 36px 40px;
     background-color: var(--background);
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 28px;
 }
 
 /* --- Header Section --- */
@@ -171,7 +261,7 @@ header {
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
     border-radius: var(--radius-xl);
-    padding: 24px 36px;
+    padding: 20px 28px;
     box-shadow: var(--shadow-md);
     display: flex;
     justify-content: space-between;
@@ -179,9 +269,15 @@ header {
     animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 header h1 {
     font-family: var(--font-heading);
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     font-weight: 700;
     color: var(--dark);
     letter-spacing: -0.02em;
@@ -249,7 +345,7 @@ header #username {
 .cards {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
+    gap: 20px;
     animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -258,8 +354,8 @@ header #username {
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border-radius: var(--radius-xl);
-    padding: 24px;
+    border-radius: var(--radius-lg);
+    padding: 20px;
     box-shadow: var(--shadow-md);
     transition: var(--transition-normal);
     position: relative;
@@ -299,15 +395,15 @@ header #username {
 /* Orange */
 .card h2 {
     font-family: var(--font-heading);
-    font-size: 2.2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     color: var(--dark);
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     letter-spacing: -0.02em;
 }
 
 .card p {
-    font-size: 0.85rem;
+    font-size: 0.78rem;
     color: #64748B;
     font-weight: 600;
     text-transform: uppercase;
@@ -315,18 +411,18 @@ header #username {
 }
 
 .card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
     border-color: rgba(37, 99, 235, 0.25);
 }
 
 /* Adding icons mockups */
 .card::after {
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     position: absolute;
-    bottom: 20px;
-    right: 20px;
-    opacity: 0.15;
+    bottom: 16px;
+    right: 16px;
+    opacity: 0.12;
     transition: var(--transition-normal);
 }
 
@@ -357,25 +453,25 @@ header #username {
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border-radius: var(--radius-xl);
-    padding: 32px 36px;
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
     box-shadow: var(--shadow-md);
     animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .member-box h2 {
     font-family: var(--font-heading);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--dark);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     letter-spacing: -0.01em;
 }
 
 #memberForm {
     display: grid;
     grid-template-columns: 2fr 1fr 1.5fr auto;
-    gap: 16px;
+    gap: 12px;
     align-items: center;
 }
 
@@ -383,9 +479,9 @@ header #username {
     background: var(--white);
     border: 1px solid #E2E8F0;
     border-radius: var(--radius-md);
-    padding: 14px 20px;
+    padding: 12px 16px;
     font-family: inherit;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: var(--dark);
     transition: var(--transition-fast);
     box-shadow: var(--shadow-sm);
@@ -403,10 +499,10 @@ header #username {
     color: var(--white);
     border: none;
     border-radius: var(--radius-md);
-    padding: 14px 28px;
+    padding: 12px 24px;
     font-family: inherit;
     font-weight: 600;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: var(--transition-fast);
     box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
@@ -434,17 +530,17 @@ main>section:last-child {
 
 main>section:last-child h2 {
     font-family: var(--font-heading);
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--dark);
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     letter-spacing: -0.01em;
 }
 
 .member-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
 }
 
 .member-card {
@@ -452,12 +548,12 @@ main>section:last-child h2 {
     border: 1px solid var(--glass-border);
     backdrop-filter: var(--glass-blur);
     -webkit-backdrop-filter: var(--glass-blur);
-    border-radius: var(--radius-xl);
-    padding: 24px;
+    border-radius: var(--radius-lg);
+    padding: 20px;
     box-shadow: var(--shadow-md);
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 14px;
     transition: var(--transition-normal);
     position: relative;
     overflow: hidden;
@@ -466,20 +562,20 @@ main>section:last-child h2 {
 }
 
 .member-card:hover {
-    transform: translateY(-6px);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
     border-color: rgba(37, 99, 235, 0.2);
 }
 
 .member-card .avatar {
-    width: 52px;
-    height: 52px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
     color: var(--white);
     font-family: var(--font-heading);
     font-weight: 700;
-    font-size: 1.15rem;
+    font-size: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -489,14 +585,14 @@ main>section:last-child h2 {
 /* Decorate grid item list */
 .member-info h3 {
     font-family: var(--font-heading);
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 600;
     color: var(--dark);
     margin-bottom: 2px;
 }
 
 .member-info .relation {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--secondary);
     font-weight: 600;
     text-transform: uppercase;
@@ -504,26 +600,26 @@ main>section:last-child h2 {
 }
 
 .member-info .age {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #64748B;
-    margin-top: 6px;
+    margin-top: 4px;
 }
 
 .member-card .actions {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     margin-top: auto;
-    padding-top: 16px;
+    padding-top: 14px;
     border-top: 1px solid rgba(15, 23, 42, 0.05);
 }
 
 .member-card .actions button {
     flex: 1;
     border: 1px solid transparent;
-    padding: 10px;
+    padding: 8px;
     border-radius: var(--radius-md);
     font-family: inherit;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition-fast);
@@ -579,61 +675,53 @@ main>section:last-child h2 {
     }
 }
 
-/* Small Desktop / Large Tablet (1024px and down) */
+/* Tablet and Mobile (1024px and down) - Collapsible Sidebar */
 @media (max-width: 1024px) {
     .dashboard {
-        grid-template-columns: 80px 1fr;
+        grid-template-columns: 1fr;
+    }
+
+    .hamburger {
+        display: flex;
+    }
+
+    .sidebar-close {
+        display: flex;
     }
 
     .sidebar {
-        padding: 24px 10px;
-        align-items: center;
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 280px;
+        z-index: 200;
+        transform: translateX(-100%);
+        transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        border-right: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 4px 0 40px rgba(15, 23, 42, 0.2);
+        padding: 24px 20px;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
     }
 
     .sidebar .logo {
-        font-size: 0;
-        width: 42px;
-        height: 42px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        font-size: 1.3rem;
+    }
+
+    .sidebar-header {
         margin-bottom: 32px;
     }
 
-    .sidebar nav a {
-        padding: 12px;
-        justify-content: center;
-        font-size: 0;
-        gap: 0;
-        position: relative;
-    }
-
-    .sidebar nav a::before {
-        font-size: 1.2rem;
-    }
-
-    .sidebar nav a:nth-child(1)::before { content: '🏠'; }
-    .sidebar nav a:nth-child(2)::before { content: '👨‍👩‍👧'; }
-    .sidebar nav a:nth-child(3)::before { content: '📄'; }
-    .sidebar nav a:nth-child(4)::before { content: '🤖'; }
-    .sidebar nav a:nth-child(5)::before { content: '📅'; }
-    .sidebar nav a:nth-child(6)::before { content: '⚙️'; }
-    #logoutBtn::before { content: '🚪'; }
-
-    #logoutBtn {
-        padding: 12px;
-        justify-content: center;
-        font-size: 0;
-        gap: 0;
-    }
-
     main {
-        padding: 32px;
+        padding: 28px 28px;
     }
 
     .cards {
         grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+        gap: 16px;
     }
 
     #memberForm {
@@ -645,92 +733,44 @@ main>section:last-child h2 {
     }
 
     .member-grid {
-        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     }
 }
 
-/* Tablet (768px and down) */
+/* Mobile (768px and down) */
 @media (max-width: 768px) {
     .dashboard {
-        grid-template-columns: 1fr;
-        padding-bottom: 76px;
+        padding-bottom: 0;
     }
 
     .sidebar {
-        position: fixed;
-        bottom: 0;
-        top: auto;
-        left: 0;
-        right: 0;
-        height: 68px;
         width: 100%;
-        flex-direction: row;
-        padding: 0 12px;
-        align-items: center;
-        justify-content: space-around;
-        border-right: none;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 -8px 30px rgba(15, 23, 42, 0.15);
-        background: linear-gradient(180deg, #0b1120 0%, #070a12 100%);
-        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
-    }
-
-    .sidebar .logo {
-        display: none;
-    }
-
-    .sidebar nav {
-        flex-direction: row;
-        justify-content: space-around;
-        align-items: center;
-        width: 100%;
-        margin: 0;
-        gap: 0;
-    }
-
-    .sidebar nav a {
-        width: 44px;
-        height: 44px;
-        padding: 0;
-        border-radius: var(--radius-sm);
-        background: transparent !important;
-        box-shadow: none !important;
-        color: #64748B;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .sidebar nav a::before {
-        font-size: 1.25rem;
-    }
-
-    .sidebar nav a.active {
-        color: var(--secondary) !important;
-        transform: scale(1.15);
-    }
-
-    #logoutBtn {
-        border-top: none;
-        padding: 0;
-        margin: 0;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        max-width: 320px;
+        padding: 20px 16px;
     }
 
     main {
-        padding: 24px 16px;
-        gap: 28px;
+        padding: 20px 16px;
+        gap: 24px;
     }
 
     header {
         flex-direction: column;
         align-items: stretch;
-        gap: 20px;
-        padding: 20px;
+        gap: 16px;
+        padding: 16px 20px;
+    }
+
+    .header-left {
+        gap: 12px;
+    }
+
+    header h1 {
+        font-size: 1.3rem;
+    }
+
+    header p {
+        font-size: 0.85rem;
     }
 
     .header-right {
@@ -741,51 +781,7 @@ main>section:last-child h2 {
     .header-right input {
         flex-grow: 1;
         width: auto;
-    }
-
-    .cards {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-    }
-
-    .card h2 {
-        font-size: 1.8rem;
-    }
-
-    #memberForm {
-        grid-template-columns: 1fr;
-        gap: 12px;
-    }
-
-    #memberForm button {
-        grid-column: span 1;
-        padding: 16px;
-    }
-
-    .member-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-}
-
-/* Small Phones (480px and down) */
-@media (max-width: 480px) {
-    main {
-        padding: 16px 12px;
-        gap: 20px;
-    }
-
-    header {
-        padding: 16px;
-        border-radius: var(--radius-lg);
-    }
-
-    header h1 {
-        font-size: 1.35rem;
-    }
-
-    header p {
-        font-size: 0.85rem;
+        padding: 10px 16px;
     }
 
     .header-right button {
@@ -794,13 +790,8 @@ main>section:last-child h2 {
     }
 
     .cards {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 12px;
-    }
-
-    .card {
-        padding: 18px 16px;
-        border-radius: var(--radius-lg);
     }
 
     .card h2 {
@@ -812,40 +803,113 @@ main>section:last-child h2 {
     }
 
     .card::after {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
+        bottom: 12px;
+        right: 12px;
     }
 
-    .member-box {
-        padding: 24px 16px;
+    #memberForm {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    #memberForm button {
+        grid-column: span 1;
+        padding: 14px;
+    }
+
+    .member-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+}
+
+/* Small Phones (480px and down) */
+@media (max-width: 480px) {
+    main {
+        padding: 14px 10px;
+        gap: 16px;
+    }
+
+    header {
+        padding: 14px 16px;
         border-radius: var(--radius-lg);
     }
 
-    .member-box h2 {
+    header h1 {
+        font-size: 1.15rem;
+    }
+
+    header p {
+        font-size: 0.8rem;
+    }
+
+    .header-right button {
+        width: 38px;
+        height: 38px;
+        font-size: 1rem;
+    }
+
+    .header-right input {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .card {
+        padding: 14px 14px;
+        border-radius: var(--radius-md);
+    }
+
+    .card h2 {
+        font-size: 1.3rem;
+    }
+
+    .card p {
+        font-size: 0.65rem;
+    }
+
+    .card::after {
         font-size: 1.1rem;
+        bottom: 10px;
+        right: 10px;
+    }
+
+    .member-box {
+        padding: 18px 16px;
+        border-radius: var(--radius-md);
+    }
+
+    .member-box h2 {
+        font-size: 1rem;
     }
 
     #memberForm input {
-        padding: 12px 16px;
+        padding: 10px 14px;
         font-size: 0.85rem;
     }
 
     .member-card {
-        padding: 18px;
-        border-radius: var(--radius-lg);
+        padding: 16px;
+        border-radius: var(--radius-md);
     }
 
     .member-card .avatar {
-        width: 44px;
-        height: 44px;
-        font-size: 1rem;
+        width: 38px;
+        height: 38px;
+        font-size: 0.85rem;
     }
 
     .member-info h3 {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
 
     .member-card .actions button {
-        padding: 8px;
-        font-size: 0.8rem;
+        padding: 7px;
+        font-size: 0.75rem;
     }
 }

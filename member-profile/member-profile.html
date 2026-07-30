@@ -11,11 +11,17 @@
 <body>
 
     <div class="dashboard">
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
         <!-- ================= Sidebar ================= -->
-        <aside class="sidebar">
-            <div class="logo">
-                ❤️ HealthMate
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    ❤️ HealthMate
+                </div>
+                <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Close sidebar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
             </div>
             <nav>
                 <a href="../dashboard/dashboard.html">🏠 Dashboard</a>
@@ -49,6 +55,11 @@
 
                 <!-- Back Navigation -->
                 <div class="back-nav">
+                    <button class="hamburger" id="hamburgerBtn" aria-label="Toggle navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                     <a href="../dashboard/dashboard.html" class="back-btn">← Back to Dashboard</a>
                     <span id="breadcrumb" class="breadcrumb"></span>
                 </div>
@@ -196,7 +207,22 @@
             </button>
         </div>
         <div class="image-modal-body">
-            <img id="viewImageFull" src="" alt="Medical Report">
+            <div class="image-modal-image-wrapper">
+                <img id="viewImageFull" src="" alt="Medical Report">
+            </div>
+            <div class="image-modal-sidebar" id="aiSidebar">
+                <div class="ai-sidebar-header">
+                    <h3>AI Analysis</h3>
+                </div>
+                <div class="ai-sidebar-content">
+                    <button id="aiAnalyzeBtn" class="ai-analyze-btn">AI Analyze</button>
+                    <div id="aiLoading" class="ai-loading" style="display:none;">
+                        <div class="spinner"></div>
+                        <p>Analyzing report...</p>
+                    </div>
+                    <div id="aiSummary" class="ai-summary" style="display:none;"></div>
+                </div>
+            </div>
         </div>
     </div>
 

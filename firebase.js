@@ -361,6 +361,39 @@ async function deleteReport(memberId, reportId) {
 
 
 // =========================
+// GET REPORT (Single)
+// =========================
+
+async function getReport(memberId, reportId) {
+    const user = auth.currentUser;
+    if (!user) return null;
+
+    const docRef = doc(db, "users", user.uid, "familyMembers", memberId, "reports", reportId);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        return { id: docSnap.id, ...docSnap.data() };
+    }
+    return null;
+}
+
+
+// =========================
+// UPDATE REPORT
+// =========================
+
+async function updateReport(memberId, reportId, data) {
+    const user = auth.currentUser;
+    if (!user) throw new Error("User not logged in");
+
+    await updateDoc(
+        doc(db, "users", user.uid, "familyMembers", memberId, "reports", reportId),
+        data
+    );
+}
+
+
+// =========================
 // EXPORT FUNCTIONS
 // =========================
 
@@ -379,6 +412,8 @@ export {
     uploadToCloudinary,
     addReport,
     getReports,
+    getReport,
+    updateReport,
     deleteReport,
     onAuthStateChanged,
 };
