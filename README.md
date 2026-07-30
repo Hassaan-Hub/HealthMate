@@ -1,1 +1,1 @@
-https://hassaan-hub.github.io/HealthMate/
+https://health-mate-one-rouge.vercel.app/
