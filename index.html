@@ -17,7 +17,19 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
         rel="stylesheet">
 
+    <link rel="stylesheet" href="design-system.css">
     <link rel="stylesheet" href="style.css">
+
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('hm-theme');
+                if (!t) { t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+        })();
+    </script>
+    <script src="theme.js" defer></script>
 </head>
 
 <body>
@@ -52,8 +64,8 @@
             </div>
 
             <div class="nav-actions">
-                <button class="theme-btn" id="themeBtn">
-                    ☾
+                <button class="theme-btn" id="themeBtn" data-theme-toggle aria-label="Toggle theme">
+                    <span data-theme-icon>☾</span>
                 </button>
 
                 <button class="menu-btn" id="menuBtn">

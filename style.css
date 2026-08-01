@@ -234,12 +234,12 @@ button {
     transform: translateY(-2px);
 }
 
-.dark-mode #navLoginBtn {
+[data-theme="dark"] #navLoginBtn {
     border-color: var(--primary);
     color: var(--primary) !important;
 }
 
-.dark-mode #navLoginBtn:hover {
+[data-theme="dark"] #navLoginBtn:hover {
     background: var(--primary);
     color: #0f172a !important;
 }
@@ -2110,7 +2110,7 @@ button {
    DARK MODE
 ========================= */
 
-body.dark-mode {
+[data-theme="dark"] {
 
     --background: #020617;
 
@@ -2127,17 +2127,17 @@ body.dark-mode {
     background: #020617;
 }
 
-.dark-mode .header,
-.dark-mode .footer,
-.dark-mode .stats-section,
-.dark-mode .how-section {
+[data-theme="dark"] .header,
+[data-theme="dark"] .footer,
+[data-theme="dark"] .stats-section,
+[data-theme="dark"] .how-section {
 
     background: #0f172a;
 
     border-color: #1e293b;
 }
 
-.dark-mode .hero {
+[data-theme="dark"] .hero {
 
     background:
 
@@ -2148,51 +2148,51 @@ body.dark-mode {
         #020617;
 }
 
-.dark-mode .dashboard-card,
-.dark-mode .feature-card,
-.dark-mode .floating-card,
-.dark-mode .security-card {
+[data-theme="dark"] .dashboard-card,
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .floating-card,
+[data-theme="dark"] .security-card {
 
     background: #0f172a;
 
     border-color: #1e293b;
 }
 
-.dark-mode .dashboard-topbar,
-.dark-mode .family-card,
-.dark-mode .ai-card {
+[data-theme="dark"] .dashboard-topbar,
+[data-theme="dark"] .family-card,
+[data-theme="dark"] .ai-card {
 
     border-color: #1e293b;
 }
 
-.dark-mode .dashboard-sidebar,
-.dark-mode .notification-btn {
+[data-theme="dark"] .dashboard-sidebar,
+[data-theme="dark"] .notification-btn {
 
     background: #020617;
 }
 
-.dark-mode .overview-card,
-.dark-mode .family-card {
+[data-theme="dark"] .overview-card,
+[data-theme="dark"] .family-card {
 
     border-color: #1e293b;
 }
 
-.dark-mode .feature-card p,
-.dark-mode .step p,
-.dark-mode .security-item p,
-.dark-mode .footer-brand p {
+[data-theme="dark"] .feature-card p,
+[data-theme="dark"] .step p,
+[data-theme="dark"] .security-item p,
+[data-theme="dark"] .footer-brand p {
 
     color: #94a3b8;
 }
 
-.dark-mode .family-illustration {
+[data-theme="dark"] .family-illustration {
 
     background: linear-gradient(145deg,
             #172554,
             #064e3b);
 }
 
-.dark-mode .illustration-circle {
+[data-theme="dark"] .illustration-circle {
 
     background: #0f172a;
 }
@@ -2690,5 +2690,246 @@ body.dark-mode {
 
     .footer-bottom p {
         font-size: 10px;
+    }
+}
+
+
+/* =========================
+   DESIGN-SYSTEM ALIGNMENT & POLISH
+   (loads after base rules — safe overrides)
+========================= */
+
+/* --- Theme toggle (landing style, aligned to shared component) --- */
+
+.theme-btn,
+.menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.theme-btn:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+    transform: rotate(12deg) scale(1.05);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.18);
+}
+
+.menu-btn:hover {
+    background: var(--primary-soft);
+    color: var(--primary);
+}
+
+/* --- Dark mode polish for hard-coded light values --- */
+
+[data-theme="dark"] .secondary-btn {
+    background: var(--surface);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .nav-links {
+    background: var(--surface);
+    border-color: var(--border);
+    box-shadow: 0 15px 30px rgba(2, 6, 23, 0.55);
+}
+
+[data-theme="dark"] .nav-links a:hover {
+    background: var(--primary-soft);
+}
+
+[data-theme="dark"] .theme-btn:hover,
+[data-theme="dark"] .menu-btn:hover {
+    background: var(--primary-soft);
+}
+
+[data-theme="dark"] .footer-bottom {
+    border-top-color: var(--border);
+}
+
+/* --- Micro-interactions --- */
+
+.logo {
+    transition: transform var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.03);
+}
+
+.primary-btn,
+.secondary-btn,
+.nav-button,
+#navLoginBtn {
+    will-change: transform;
+}
+
+.primary-btn:hover {
+    background: var(--grad-brand);
+    background-size: 160% 160%;
+    box-shadow: 0 16px 35px rgba(37, 99, 235, 0.35);
+}
+
+.primary-btn:hover span,
+.secondary-btn:hover span {
+    transform: translateX(4px);
+}
+
+.primary-btn span,
+.secondary-btn span {
+    display: inline-block;
+    transition: transform var(--transition);
+}
+
+.secondary-btn:hover {
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.18);
+}
+
+.nav-links a {
+    position: relative;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--grad-brand);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s var(--ease-out);
+}
+
+.nav-links a:hover::after {
+    transform: scaleX(1);
+}
+
+.nav-links .nav-button::after {
+    display: none;
+}
+
+.feature-card:hover {
+    border-color: rgba(37, 99, 235, 0.4);
+    box-shadow: 0 24px 45px rgba(15, 23, 42, 0.12);
+}
+
+.feature-card:hover .feature-icon {
+    transform: translateY(-4px) scale(1.06);
+}
+
+.feature-icon {
+    transition: transform var(--transition);
+}
+
+@keyframes pulse-dot {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 0 8px rgba(37, 99, 235, 0);
+    }
+}
+
+.badge-dot {
+    animation: pulse-dot 2.2s ease-in-out infinite;
+}
+
+/* --- Ultra-wide (1600px+) --- */
+
+@media (min-width: 1600px) {
+
+    .container {
+        max-width: 1320px;
+    }
+
+    .hero h1 {
+        font-size: 82px;
+        line-height: 1.02;
+    }
+
+    .hero {
+        padding: 170px 0 120px;
+    }
+
+    .hero-content>p {
+        font-size: 20px;
+        max-width: 560px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        padding: 17px 26px;
+        font-size: 15px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+    }
+
+    .section-heading h2 {
+        font-size: 48px;
+    }
+
+    .feature-card {
+        min-height: 320px;
+        padding: 32px 28px;
+    }
+}
+
+/* --- Very small phones (360px and down) --- */
+
+@media (max-width: 360px) {
+
+    .container {
+        padding-left: 18px;
+        padding-right: 18px;
+    }
+
+    .logo {
+        font-size: 16px;
+    }
+
+    .logo-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .hero {
+        padding: 100px 0 45px;
+    }
+
+    .hero h1 {
+        font-size: 29px;
+    }
+
+    .hero-content>p {
+        font-size: 13px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+        padding: 12px 15px;
+        font-size: 12.5px;
+        gap: 8px;
+    }
+
+    .hero-badge {
+        font-size: 9px;
+        padding: 5px 10px;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .footer-links {
+        gap: 10px;
     }
 }

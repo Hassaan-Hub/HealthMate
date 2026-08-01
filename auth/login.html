@@ -15,11 +15,27 @@
         href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
         rel="stylesheet">
 
+    <link rel="stylesheet" href="../design-system.css">
     <link rel="stylesheet" href="auth.css">
+
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('hm-theme');
+                if (!t) { t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'; }
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { document.documentElement.setAttribute('data-theme', 'light'); }
+        })();
+    </script>
+    <script src="../theme.js" defer></script>
 
 </head>
 
 <body>
+
+    <button class="theme-toggle theme-toggle-float" data-theme-toggle aria-label="Toggle theme">
+        <span data-theme-icon>☾</span>
+    </button>
 
     <main class="auth-page">
 
@@ -172,4 +188,5 @@
     </main>
 </body>
 <script type="module" src="login.js"></script>
+
 </html>

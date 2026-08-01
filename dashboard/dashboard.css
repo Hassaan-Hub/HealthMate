@@ -1,36 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
 
-/* --- Theme Variables & Foundations --- */
-:root {
-    --primary: #2563EB;
-    --secondary: #3B82F6;
-    --dark: #0F172A;
-    --background: #F8FAFC;
-    --white: #FFFFFF;
-
-    /* Design Tokens */
-    --font-heading: 'Outfit', 'Inter', sans-serif;
-    --font-body: 'Inter', sans-serif;
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 20px;
-
-    /* Shadows */
-    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-    --shadow-md: 0 8px 24px rgba(15, 23, 42, 0.06);
-    --shadow-lg: 0 16px 36px rgba(15, 23, 42, 0.08);
-    --shadow-focus: 0 0 0 4px rgba(37, 99, 235, 0.12);
-
-    /* Glassmorphism Details */
-    --glass-bg: rgba(255, 255, 255, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.6);
-    --glass-blur: blur(12px);
-
-    /* Transitions */
-    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-normal: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-}
+/* --- Theme tokens come from ../design-system.css (light + dark) --- */
 
 /* --- Reset & Base Styles --- */
 * {
@@ -911,5 +881,165 @@ main>section:last-child h2 {
     .member-card .actions button {
         padding: 7px;
         font-size: 0.75rem;
+    }
+}
+
+
+/* =========================================================================
+   DESIGN-SYSTEM ALIGNMENT
+   (dark mode + polish + extra breakpoints, appended after base rules)
+   ========================================================================= */
+
+/* --- Dark mode: fix semantic --white usage on colored surfaces --- */
+[data-theme="dark"] .sidebar .logo,
+[data-theme="dark"] #memberForm button,
+[data-theme="dark"] .member-card .avatar,
+[data-theme="dark"] .member-card .actions .edit-btn:hover,
+[data-theme="dark"] .member-card .actions .delete-btn:hover {
+    color: #FFFFFF;
+}
+
+[data-theme="dark"] .sidebar nav a.active {
+    color: #FFFFFF;
+}
+
+/* --- Dark mode: hard-coded light colors -> tokens --- */
+[data-theme="dark"] .hamburger:hover,
+[data-theme="dark"] .header-right button:hover {
+    background: var(--gray);
+    border-color: var(--border-strong);
+}
+
+[data-theme="dark"] header p,
+[data-theme="dark"] .card p,
+[data-theme="dark"] .member-info .age {
+    color: var(--muted);
+}
+
+[data-theme="dark"] .header-right input,
+[data-theme="dark"] .header-right button,
+[data-theme="dark"] #memberForm input {
+    background: var(--surface);
+    border-color: var(--border);
+}
+
+[data-theme="dark"] .header-right input:focus,
+[data-theme="dark"] #memberForm input:focus {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-focus);
+}
+
+[data-theme="dark"] #logoutBtn:hover {
+    color: var(--danger);
+    background: var(--danger-bg);
+}
+
+[data-theme="dark"] .member-card .actions .delete-btn {
+    color: var(--danger);
+}
+
+[data-theme="dark"] .member-card .actions {
+    border-top-color: var(--border);
+}
+
+[data-theme="dark"] .member-card .actions .edit-btn {
+    background: var(--primary-soft);
+}
+
+/* --- Dark mode: soften background glows --- */
+[data-theme="dark"] body::before,
+[data-theme="dark"] body::after {
+    opacity: 0.28;
+}
+
+/* --- Polish: subtle stagger + hover depth --- */
+.member-card:nth-child(2) {
+    animation-delay: 0.05s;
+}
+
+.member-card:nth-child(3) {
+    animation-delay: 0.1s;
+}
+
+.member-card:nth-child(4) {
+    animation-delay: 0.15s;
+}
+
+.member-card:nth-child(5) {
+    animation-delay: 0.2s;
+}
+
+.card:hover {
+    border-color: rgba(37, 99, 235, 0.45);
+    transform: translateY(-5px);
+}
+
+.card:hover::after {
+    transform: scale(1.2) rotate(-5deg);
+    opacity: 0.28;
+}
+
+.header-right button {
+    color: var(--text-primary);
+}
+
+.header-right button:hover {
+    color: var(--primary);
+}
+
+.header-right .theme-toggle:hover {
+    transform: rotate(12deg) scale(1.05);
+}
+
+/* --- Ultra-wide (1600px+) --- */
+@media (min-width: 1600px) {
+    main {
+        padding: 40px 48px;
+        gap: 32px;
+    }
+
+    .cards {
+        gap: 24px;
+    }
+
+    .member-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    header {
+        padding: 22px 32px;
+    }
+}
+
+/* --- Very small phones (400px and down) --- */
+@media (max-width: 400px) {
+    .header-right {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .header-right input {
+        order: 1;
+        width: 100%;
+        flex-basis: 100%;
+    }
+
+    .header-right button {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 1;
+    }
+
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    .header-left {
+        gap: 8px;
+    }
+
+    .hamburger {
+        width: 36px;
+        height: 36px;
     }
 }
